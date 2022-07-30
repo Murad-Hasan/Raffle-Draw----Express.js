@@ -1,12 +1,13 @@
-const e = require("cors");
 const Ticket = require("./Ticket");
 const { readFile, writeFile } = require("./utils");
 
-const tickets = symbol("tickets");
+const tickets = Symbol("tickets");
 
 class ticketCollection {
   constructor() {
-    this[tickets] = [];
+    (async function () {
+      this[tickets] = await readFile();
+    }.bind(this));
   }
   /**
    * create and save a new ticket
@@ -17,7 +18,8 @@ class ticketCollection {
   create(username, price) {
     const ticket = new Ticket(username, price);
     this[tickets].push(ticket);
-    return ticket; //in video it's show tickets.
+    writeFile(this[tickets]);
+    return tickets; //in video it's show tickets.
   }
 
   /**
@@ -34,6 +36,7 @@ class ticketCollection {
       const ticket = new Ticket(username, price);
       result.push(ticket);
     }
+    writeFile(this[tickets]);
     return result;
   }
 
@@ -80,6 +83,7 @@ class ticketCollection {
       ticket.username = ticketBody.username ?? ticket.username;
       ticket.price = ticketBody.price ?? ticket.price;
     }
+    writeFile(this[tickets]);
     return ticket;
   }
   /**
@@ -98,6 +102,7 @@ class ticketCollection {
 
       (ticket) => this.updateById(ticket.id, ticketBody)
     );
+    writeFile(this[tickets]);
     return updatedTickets;
   }
 
@@ -118,6 +123,7 @@ class ticketCollection {
       return false;
     } else {
       this[tickets].splice(index, 1);
+      writeFile(this[tickets]);
       return true;
     }
   }
@@ -137,6 +143,7 @@ class ticketCollection {
 
       (ticket) => this.deleteById(ticket.id)
     );
+    writeFile(this[tickets]);
     return deletedResult;
   }
 
@@ -168,6 +175,6 @@ class ticketCollection {
   }
 }
 
-const ticketCollection = new ticketCollection();
+const Collection = new ticketCollection();
 
-module.exports = ticketCollection;
+module.exports = Collection;

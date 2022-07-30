@@ -71,3 +71,32 @@ exports.updateByUsername = (req, res) => {
     total: tickets.length,
   });
 };
+
+//delete controllers
+
+exports.deleteById = (req, res) => {
+  const id = req.params.id;
+  const isDeleted = ticketCollection.deleteById(id);
+  if(isDeleted){
+    return res.status(200).send();
+  }
+  res.status(404).json({
+    message: "Delete operation failed",
+  });
+}
+
+exports.deleteByUsername = (req, res) => {
+  const username = req.params.username;
+  ticketCollection.deleteBulk(username);
+  res.status(200).send() ; 
+}
+
+//draw ticket controller
+
+exports.drawWinners = (req, res) => {
+  const wc = req.query.wc ?? 3;
+  const winners = ticketCollection.draw(wc);
+  res.status(200).json({
+    winners
+  });
+}
