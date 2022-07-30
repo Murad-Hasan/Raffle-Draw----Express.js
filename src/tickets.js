@@ -7,7 +7,7 @@ class ticketCollection {
   constructor() {
     (async function () {
       this[tickets] = await readFile();
-    }.bind(this));
+    }.call(this));
   }
   /**
    * create and save a new ticket
@@ -19,21 +19,21 @@ class ticketCollection {
     const ticket = new Ticket(username, price);
     this[tickets].push(ticket);
     writeFile(this[tickets]);
-    return tickets; //in video it's show tickets.
+    return ticket; //in video it's show tickets.
   }
 
   /**
    *
    * @param {string} username
    * @param {number} price
-   * @param {number} quality
+   * @param {number} quantity
    * @returns {Ticket[]}
    */
 
-  createBulk(username, price, quality) {
+  createBulk(username, price, quantity) {
     const result = [];
-    for (let i = 0; i < quality; i++) {
-      const ticket = new Ticket(username, price);
+    for (let i = 0; i < quantity; i++) {
+      const ticket = this.create(username, price);
       result.push(ticket);
     }
     writeFile(this[tickets]);
@@ -65,10 +65,16 @@ class ticketCollection {
    * @returns {Ticket[]}
    * */
   findTicketsByUsername(username) {
-    const tickets = this[tickets].filter(
+    const userTickets = this[tickets].filter(
+      /**
+       *
+       * @param {Ticket} ticket
+       *
+       */
       (ticket) => ticket.username === username
     );
-    return tickets;
+
+    return userTickets;
   }
   /**
    * update by id

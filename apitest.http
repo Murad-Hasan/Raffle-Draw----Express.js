@@ -1,0 +1,55 @@
+GET http://localhost:4000/health
+
+
+###
+
+GET http://localhost:4000/api/v1/tickets
+
+
+###
+POST http://localhost:4000/api/v1/tickets
+Content-Type: application/json
+
+{
+  "username": "kaku",
+  "price": 100
+}
+###
+
+GET http://localhost:4000/api/v1/tickets/t/spbXos4M1
+
+###
+
+GET http://localhost:4000/api/v1/tickets/u/kaku
+
+###
+DELETE http://localhost:4000/api/v1/tickets/t/4O54Wd2TN
+
+
+###
+
+DELETE http://localhost:4000/api/v1/tickets/u/murad
+
+//problem with this one when going to delete a ticket by the name.
+
+
+###
+PUT http://localhost:4000/api/v1/tickets/t/spbXos4M1
+
+Content-Type: application/json
+{
+  "username": "Murad Hasan"
+}
+
+//problem with this api.
+
+###
+
+POST http://localhost:4000/api/v1/tickets/bulk
+Content-Type: application/json
+
+{
+  "username": "kaku",
+  "price": 100,
+  "quantity": 4
+}

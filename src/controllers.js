@@ -12,8 +12,8 @@ exports.sellSingleTicket = (req, res) => {
 };
 
 exports.sellBulkTickets = (req, res) => {
-  const { username, price, quality } = req.body;
-  const tickets = ticketCollection.createBulk(username, price, quality);
+  const { username, price, quantity } = req.body;
+  const tickets = ticketCollection.createBulk(username, price, quantity);
   res.status(201).json({
     message: "Bulk Tickets created",
     tickets,
@@ -43,7 +43,7 @@ exports.findById = (req, res) => {
 
 exports.findByUsername = (req, res) => {
   const { username } = req.params;
-  const tickets = ticketCollection.findByUsername(username);
+  const tickets = ticketCollection.findTicketsByUsername(username);
   res.status(200).json({
     items: tickets,
     total: tickets.length,
@@ -77,19 +77,22 @@ exports.updateByUsername = (req, res) => {
 exports.deleteById = (req, res) => {
   const id = req.params.id;
   const isDeleted = ticketCollection.deleteById(id);
-  if(isDeleted){
+  if (isDeleted) {
     return res.status(200).send();
   }
   res.status(404).json({
     message: "Delete operation failed",
   });
-}
+};
 
 exports.deleteByUsername = (req, res) => {
   const username = req.params.username;
-  ticketCollection.deleteBulk(username);
-  res.status(200).send() ; 
-}
+  const tickets = ticketCollection.deleteBulk(username);
+  res.status(200).json({
+    items: tickets,
+    total: tickets.length,
+  });
+};
 
 //draw ticket controller
 
@@ -97,6 +100,6 @@ exports.drawWinners = (req, res) => {
   const wc = req.query.wc ?? 3;
   const winners = ticketCollection.draw(wc);
   res.status(200).json({
-    winners
+    winners,
   });
-}
+};
