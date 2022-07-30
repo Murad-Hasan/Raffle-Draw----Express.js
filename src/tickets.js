@@ -17,7 +17,7 @@ class ticketCollection {
   create(username, price) {
     const ticket = new Ticket(username, price);
     this[tickets].push(ticket);
-    return tickets;
+    return ticket; //in video it's show tickets.
   }
 
   /**
@@ -168,6 +168,6 @@ class ticketCollection {
   }
 }
 
-const collection = new ticketCollection();
+const ticketCollection = new ticketCollection();
 
-module.exports = collection;
+module.exports = ticketCollection;
